@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: ignis-backend
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ignis
+    username: ignis
+    password: ignis
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: ignis
+        show-sql: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    default-schema: ignis
+    liquibase-schema: ignis
+
+jwt:
+  secret: OFnuJBYJC04pOZA0URQL69j4GZQywbGYm7PXAigbD7c=
+  expiration: 86400000
+
+riot:
+  api:
+    key: ${RIOT_API_KEY}
+    base-url: ${RIOT_API_BASE_URL:https://europe.api.riotgames.com}
+    league-url: ${RIOT_LEAGUE_URL:https://euw1.api.riotgames.com}
+    platform: ${RIOT_API_PLATFORM:EUW1}
+
+tournament:
+  pickup:
+    iterations: 100
+
+cors:
+  allowed-origins: http://localhost:4200, https://ignis-app.duckdns.org
+
+logging: 
+  level: 
+    org:
+      springframework: 
+        security: DEBUG
+        web: DEBUG

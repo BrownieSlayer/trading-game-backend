@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ignis-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ignis
+    username: ignis
+    password: ignis
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+cookie:
+  secure: false
