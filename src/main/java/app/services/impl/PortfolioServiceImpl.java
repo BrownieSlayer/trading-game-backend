@@ -16,6 +16,7 @@ import app.configuration.game.TickerUniverse;
 import app.dto.market.PriceQuote;
 import app.dto.portfolio.HoldingDto;
 import app.dto.portfolio.PortfolioDto;
+import app.dto.portfolio.PortfolioValuePointDto;
 import app.dto.portfolio.TransactionDto;
 import app.enums.TransactionType;
 import app.exceptions.InsufficientFundsException;
@@ -26,6 +27,7 @@ import app.models.Transaction;
 import app.models.User;
 import app.repositories.HoldingRepository;
 import app.repositories.PortfolioRepository;
+import app.repositories.PortfolioValueSnapshotRepository;
 import app.repositories.TransactionRepository;
 import app.services.PortfolioService;
 import app.services.market.MarketPriceCacheService;
@@ -43,6 +45,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final HoldingRepository holdingRepository;
     private final TransactionRepository transactionRepository;
+    private final PortfolioValueSnapshotRepository portfolioValueSnapshotRepository;
     private final MarketPriceCacheService marketPriceCacheService;
 
     @Override
@@ -69,11 +72,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         BigDecimal holdingsValue = BigDecimal.ZERO.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
         List<HoldingDto> holdingDtos = new ArrayList<>();
         for (Holding holding : holdings) {
-            PriceQuote quote = quotes.get(holding.getTicker());
-            BigDecimal currentPrice = quote != null
-                ? BigDecimal.valueOf(quote.price()).setScale(PRICE_SCALE, RoundingMode.HALF_UP)
-                : holding.getAverageBuyPrice();
-
+            BigDecimal currentPrice = priceOrFallback(holding, quotes.get(holding.getTicker()));
             BigDecimal value = holding.getQuantity().multiply(currentPrice).setScale(MONEY_SCALE, RoundingMode.HALF_UP);
             BigDecimal costBasis = holding.getQuantity().multiply(holding.getAverageBuyPrice()).setScale(MONEY_SCALE, RoundingMode.HALF_UP);
             BigDecimal gainAmount = value.subtract(costBasis);
@@ -211,6 +210,35 @@ public class PortfolioServiceImpl implements PortfolioService {
             .stream()
             .map(this::toDto)
             .toList();
+    }
+
+    @Override
+    public BigDecimal getTotalValue(Portfolio portfolio) {
+        List<Holding> holdings = holdingRepository.findByPortfolioId(portfolio.getId());
+        Set<String> tickers = holdings.stream().map(Holding::getTicker).collect(Collectors.toSet());
+        Map<String, PriceQuote> quotes = marketPriceCacheService.getQuotes(tickers);
+
+        BigDecimal holdingsValue = BigDecimal.ZERO.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
+        for (Holding holding : holdings) {
+            BigDecimal price = priceOrFallback(holding, quotes.get(holding.getTicker()));
+            holdingsValue = holdingsValue.add(holding.getQuantity().multiply(price).setScale(MONEY_SCALE, RoundingMode.HALF_UP));
+        }
+        return portfolio.getCash().add(holdingsValue);
+    }
+
+    @Override
+    public List<PortfolioValuePointDto> getValueHistory(User user) {
+        Portfolio portfolio = getPortfolioEntity(user);
+        return portfolioValueSnapshotRepository.findByPortfolioIdOrderBySnapshotDateAsc(portfolio.getId())
+            .stream()
+            .map(snapshot -> new PortfolioValuePointDto(snapshot.getSnapshotDate(), snapshot.getTotalValue()))
+            .toList();
+    }
+
+    private BigDecimal priceOrFallback(Holding holding, PriceQuote quote) {
+        return quote != null
+            ? BigDecimal.valueOf(quote.price()).setScale(PRICE_SCALE, RoundingMode.HALF_UP)
+            : holding.getAverageBuyPrice();
     }
 
     private Portfolio getPortfolioEntity(User user) {

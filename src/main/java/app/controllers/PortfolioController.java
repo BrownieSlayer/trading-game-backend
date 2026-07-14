@@ -11,23 +11,34 @@ import org.springframework.http.HttpStatus;
 
 import app.dto.portfolio.BuyRequest;
 import app.dto.portfolio.PortfolioDto;
+import app.dto.portfolio.PortfolioValuePointDto;
 import app.dto.portfolio.SellRequest;
 import app.dto.portfolio.TransactionDto;
 import app.models.User;
 import app.repositories.UserRepository;
+import app.services.DailyCycleService;
 import app.services.PortfolioService;
 import jakarta.validation.Valid;
 
-/** Portefeuille de l'utilisateur connecté : valorisation, achat, vente, historique des transactions. */
+/**
+ * Portefeuille de l'utilisateur connecté : valorisation, achat, vente,
+ * historique des transactions et de la valeur. Chaque appel à
+ * {@link #currentUser} résout paresseusement le "nouveau jour" (streak,
+ * snapshot de valeur — voir {@link DailyCycleService}) avant de servir la
+ * requête, pour que ce soit fait dès le premier accès authentifié de la
+ * journée à n'importe quelle route du portefeuille.
+ */
 @RestController
 @RequestMapping("/api/portfolio")
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
+    private final DailyCycleService dailyCycleService;
     private final UserRepository userRepository;
 
-    public PortfolioController(PortfolioService portfolioService, UserRepository userRepository) {
+    public PortfolioController(PortfolioService portfolioService, DailyCycleService dailyCycleService, UserRepository userRepository) {
         this.portfolioService = portfolioService;
+        this.dailyCycleService = dailyCycleService;
         this.userRepository = userRepository;
     }
 
@@ -62,8 +73,16 @@ public class PortfolioController {
         return ResponseEntity.ok(portfolioService.getTransactions(currentUser(userDetails), limit));
     }
 
+    /** Historique de la valeur du portefeuille, un point par jour joué. */
+    @GetMapping("/value-history")
+    public ResponseEntity<List<PortfolioValuePointDto>> getValueHistory(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(portfolioService.getValueHistory(currentUser(userDetails)));
+    }
+
     private User currentUser(UserDetails userDetails) {
-        return userRepository.findByUsername(userDetails.getUsername())
+        User user = userRepository.findByUsername(userDetails.getUsername())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        dailyCycleService.resolveNewDay(user);
+        return user;
     }
 }

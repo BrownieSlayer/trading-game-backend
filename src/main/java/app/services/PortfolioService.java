@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import app.dto.portfolio.PortfolioDto;
+import app.dto.portfolio.PortfolioValuePointDto;
 import app.dto.portfolio.TransactionDto;
 import app.models.Portfolio;
 import app.models.User;
@@ -23,4 +24,10 @@ public interface PortfolioService {
 
     /** Historique des transactions, les plus récentes en premier. */
     List<TransactionDto> getTransactions(User user, int limit);
+
+    /** Valeur totale courante (liquidités + positions valorisées au cache de prix). Réutilisé par {@code DailyCycleService} pour le snapshot quotidien. */
+    BigDecimal getTotalValue(Portfolio portfolio);
+
+    /** Historique de la valeur du portefeuille, un point par jour joué, du plus ancien au plus récent. */
+    List<PortfolioValuePointDto> getValueHistory(User user);
 }

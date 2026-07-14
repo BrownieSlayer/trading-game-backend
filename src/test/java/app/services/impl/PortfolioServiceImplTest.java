@@ -19,6 +19,7 @@ import app.models.Portfolio;
 import app.models.User;
 import app.repositories.HoldingRepository;
 import app.repositories.PortfolioRepository;
+import app.repositories.PortfolioValueSnapshotRepository;
 import app.repositories.TransactionRepository;
 import app.services.market.MarketPriceCacheService;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,6 +44,8 @@ class PortfolioServiceImplTest {
     @Mock
     private TransactionRepository transactionRepository;
     @Mock
+    private PortfolioValueSnapshotRepository portfolioValueSnapshotRepository;
+    @Mock
     private MarketPriceCacheService marketPriceCacheService;
 
     private PortfolioServiceImpl service;
@@ -51,7 +54,9 @@ class PortfolioServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new PortfolioServiceImpl(portfolioRepository, holdingRepository, transactionRepository, marketPriceCacheService);
+        service = new PortfolioServiceImpl(
+            portfolioRepository, holdingRepository, transactionRepository, portfolioValueSnapshotRepository, marketPriceCacheService
+        );
 
         user = new User();
         user.setId(1L);
