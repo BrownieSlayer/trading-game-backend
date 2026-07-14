@@ -23,6 +23,7 @@ import app.models.User;
 import app.repositories.UserRepository;
 import app.security.SimpleRateLimiter;
 import app.services.JwtService;
+import app.services.PortfolioService;
 import app.services.UserDetailsServiceImpl;
 import app.validators.PasswordValidator;
 import jakarta.servlet.http.Cookie;
@@ -45,6 +46,7 @@ public class AuthController {
     private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsService;
     private final SimpleRateLimiter rateLimiter;
+    private final PortfolioService portfolioService;
 
     public AuthController(
             AuthenticationManager authenticationManager,
@@ -52,7 +54,8 @@ public class AuthController {
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             UserDetailsServiceImpl userDetailsService,
-            SimpleRateLimiter rateLimiter
+            SimpleRateLimiter rateLimiter,
+            PortfolioService portfolioService
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -60,6 +63,7 @@ public class AuthController {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.rateLimiter = rateLimiter;
+        this.portfolioService = portfolioService;
     }
 
     /**
@@ -133,6 +137,7 @@ public class AuthController {
         user.setEnabled(true);
 
         User savedUser = userRepository.save(user);
+        portfolioService.createPortfolioForUser(savedUser);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
         String token = jwtService.generateToken(userDetails);
