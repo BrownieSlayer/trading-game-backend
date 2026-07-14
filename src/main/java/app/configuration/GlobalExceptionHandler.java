@@ -13,6 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import app.exceptions.InsufficientFundsException;
+import app.exceptions.InvalidQuantityException;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
@@ -38,6 +41,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         IllegalArgumentException.class,
         BadRequestException.class,
+        InsufficientFundsException.class,
+        InvalidQuantityException.class,
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
         return ResponseEntity

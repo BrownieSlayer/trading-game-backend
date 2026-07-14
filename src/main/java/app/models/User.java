@@ -16,24 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Représente un utilisateur de l'application de tournois.
- * <p>
- * Un utilisateur peut :
- * <ul>
- *   <li>Créer et participer à des tournois</li>
- *   <li>Rejoindre des équipes via {@see TeamMember}</li>
- *   <li>Établir des relations d'amitié avec d'autres utilisateurs</li>
- *   <li>Envoyer et recevoir des demandes de participation</li>
- *   <li>Accumuler des statistiques de jeu</li>
- * </ul>
- * </p>
- *
- * @author Thibault
- * @version 1.0
- * @see Team
- * @see Tournament
- * @see Friend
- * @see PlayerStats
+ * Représente un utilisateur authentifié de l'application (compte de jeu).
  */
 @Entity
 @Table(
