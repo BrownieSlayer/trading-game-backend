@@ -1,10 +1,10 @@
 spring:
   application:
-    name: ignis-backend
+    name: trading-game-backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/ignis
-    username: ignis
-    password: ignis
+    url: jdbc:postgresql://localhost:5777/trading
+    username: trading
+    password: trading
   jpa:
     hibernate:
       ddl-auto: update

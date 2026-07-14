@@ -7,10 +7,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import app.configuration.TestcontainersConfiguration;
 
-@SpringBootTest(classes = IgnisBackendApplication.class)
+@SpringBootTest(classes = TradingGameBackendApplication.class)
 @ActiveProfiles("test")
 @Import(TestcontainersConfiguration.class)
-class IgnisBackendApplicationTests {
+class TradingGameBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

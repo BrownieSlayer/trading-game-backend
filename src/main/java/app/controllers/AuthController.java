@@ -143,6 +143,7 @@ public class AuthController {
         return ResponseEntity.ok(new UserDto(
             user.getUsername(),
             user.getRole()
+        ));
     }
 
     @PostMapping("/logout")

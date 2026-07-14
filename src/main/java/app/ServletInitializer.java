@@ -7,7 +7,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(IgnisBackendApplication.class);
+		return application.sources(TradingGameBackendApplication.class);
 	}
 
 }

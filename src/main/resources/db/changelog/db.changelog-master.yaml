@@ -1,23 +1,4 @@
 databaseChangeLog:
   - include:
-      file: changesets/changeset_001.sql
-      relativeToChangelogFile: true
-  - include:
-      file: changesets/changeset_002.sql
-      relativeToChangelogFile: true
-  - include:
-      file: changesets/changeset_004.sql
-      relativeToChangelogFile: true
-  - include:
-      file: changesets/changeset_005_riot_fields.sql
-      relativeToChangelogFile: true
-  - include:
-      file: changesets/changeset_006_tournament_dates.sql
-      relativeToChangelogFile: true
-  - include:
-      file: changesets/changeset_003_test.sql
-      relativeToChangelogFile: true
-      context: test
-  - include:
-      file: changesets/changeset_007.sql
+      file: changesets/changeset_001_users.sql
       relativeToChangelogFile: true

@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Trading game backend - LOCAL",
+            "request": "launch",
+            "mainClass": "app.TradingGameBackendApplication",
+            "cwd": "${workspaceFolder}",
+            "vmArgs": "-Dspring.profiles.active=local",
+            "env": {}
+        },
+        {
+            "type": "java",
+            "name": "Trading game backend - DEV",
+            "request": "launch",
+            "mainClass": "app.TradingGameBackendApplication",
+            "cwd": "${workspaceFolder}",
+            "vmArgs": "-Dspring.profiles.active=dev",
+            "env": {}
+        },
+        {
+            "type": "java",
+            "name": "Trading game backend - PROD",
+            "request": "launch",
+            "mainClass": "app.TradingGameBackendApplication",
+            "cwd": "${workspaceFolder}",
+            "vmArgs": "-Dspring.profiles.active=prod",
+            "env": {}
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-TradingGameBackendApplication<trading-game-backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "app.TradingGameBackendApplication",
+            "projectName": "trading-game-backend",
+            "args": "",
+            "vmArgs": "-Dspring.profiles.active=local"
+        }
+    ]
+}

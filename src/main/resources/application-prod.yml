@@ -1,4 +1,4 @@
 cors:
-  allowed-origins:https://ignis-app.duckdns.org
+  allowed-origins: https://trading-game.duckdns.org
 cookie:
   secure: true

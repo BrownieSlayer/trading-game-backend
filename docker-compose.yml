@@ -2,35 +2,29 @@ services:
   trading-game-database:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ignis
-      POSTGRES_USER: ignis
-      POSTGRES_PASSWORD: ignis
+      POSTGRES_DB: trading
+      POSTGRES_USER: trading
+      POSTGRES_PASSWORD: trading
     ports:
       - "5777:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ignis"]
+      test: ["CMD-SHELL", "pg_isready -U trading"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   trading-game-backend:
-    build: ./trading-game-backend
+    build: .
     env_file:
-      - ./trading-game-backend/.env
+      - .env
     ports:
       - "5778:8080"
     depends_on:
       trading-game-database:
         condition: service_healthy
-
-  trading-game-frontend:
-    build: ./trading-game-frontend
-    ports:
-      - "5779:80"
-    depends_on:
-      - trading-game-backend
 
 volumes:
   postgres_data:

@@ -4,6 +4,7 @@ import app.configuration.TestcontainersConfiguration;
 import app.enums.SecurityRole;
 import app.models.User;
 import app.repositories.UserRepository;
+import app.security.SimpleRateLimiter;
 import app.services.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,9 @@ class SecurityIntegrationTest {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private SimpleRateLimiter rateLimiter;
+
     private String validToken;
     private User testUser;
 
@@ -55,6 +59,7 @@ class SecurityIntegrationTest {
     void setUp() {
         // Nettoyer la base
         userRepository.deleteAll();
+        rateLimiter.reset();
 
         // Créer un utilisateur de test
         testUser = new User();

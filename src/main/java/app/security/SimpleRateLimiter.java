@@ -30,4 +30,8 @@ public class SimpleRateLimiter {
         timestamps.add(now);
         return true;
     }
+
+    public void reset() {
+        requestTimestamps.clear();
+    }
 }

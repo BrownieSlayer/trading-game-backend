@@ -99,7 +99,9 @@ class UserRepositoryTest {
      */
     @Test
     void testFindAllUsers() {
-        // Récupère les utilisateurs créés en base de test (changeset_003_test.sql)
+        userRepository.save(mockUser("johnny"));
+        userRepository.save(mockUser("Bob"));
+
         var users = userRepository.findAll();
 
         assertEquals(2, users.size());

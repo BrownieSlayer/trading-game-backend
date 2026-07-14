@@ -1,11 +1,4 @@
--- Créer la base
-CREATE DATABASE ignis;
-
--- Créer l'utilisateur
-CREATE USER ignis WITH PASSWORD 'ignis';
-
--- Créer le schéma ignis
-CREATE SCHEMA ignis AUTHORIZATION ignis;
-
--- Donner tous les droits sur la base à l'utilisateur
-GRANT ALL PRIVILEGES ON DATABASE ignis TO ignis;
+-- La base "trading" et l'utilisateur "trading" sont déjà créés par Postgres
+-- à partir de POSTGRES_DB / POSTGRES_USER / POSTGRES_PASSWORD (docker-compose.yml).
+-- Ce script ne crée que le schéma applicatif utilisé par Spring/Liquibase.
+CREATE SCHEMA IF NOT EXISTS trading AUTHORIZATION trading;

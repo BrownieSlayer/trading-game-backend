@@ -53,8 +53,8 @@ class UserServiceImplTest {
         User firstUser = mockUser(1L,"John", "johnny");
         User secondUser = mockUser(2L,"Alice", "alice");
 
-        UserDto firstUserResponse = new UserDto("John", app.enums.SecurityRole.ROLE_USER, "John#EUW", "GOLD", "III");
-        UserDto secondUserResponse = new UserDto("Alice", app.enums.SecurityRole.ROLE_USER, "Alice#EUW", "SILVER", "II");
+        UserDto firstUserResponse = new UserDto("John", app.enums.SecurityRole.ROLE_USER);
+        UserDto secondUserResponse = new UserDto("Alice", app.enums.SecurityRole.ROLE_USER);
 
         when(userRepository.findAll()).thenReturn(List.of(firstUser, secondUser));
         when(mapper.convertToUserDto(firstUser)).thenReturn(firstUserResponse);
@@ -71,7 +71,7 @@ class UserServiceImplTest {
     @Test
     void testGetById() {
         User user = mockUser(1L,"John", "johnny");
-        UserDto userResponse = new UserDto("John", app.enums.SecurityRole.ROLE_USER, "John#EUW", "GOLD", "III");
+        UserDto userResponse = new UserDto("John", app.enums.SecurityRole.ROLE_USER);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(mapper.convertToUserDto(user)).thenReturn(userResponse);
@@ -97,7 +97,7 @@ class UserServiceImplTest {
     @Test
     void testCreate() {
         UserRequest userRequest = new UserRequest("John", "johnny");
-        UserDto userResponse = new UserDto("John", app.enums.SecurityRole.ROLE_USER, "John#EUW", "GOLD", "III");
+        UserDto userResponse = new UserDto("John", app.enums.SecurityRole.ROLE_USER);
 
         User user = mockUser("John", "johnny");
         User savedUser = mockUser("John", "johnny");
@@ -117,7 +117,7 @@ class UserServiceImplTest {
     @Test
     void testUpdate() {
         UserRequest userRequest = new UserRequest("John Updated", "john.updated@mail.com");
-        UserDto userResponse = new UserDto("John Updated", app.enums.SecurityRole.ROLE_USER, "JohnUpdated#EUW", "PLATINUM", "IV");
+        UserDto userResponse = new UserDto("John Updated", app.enums.SecurityRole.ROLE_USER);
 
         User user = mockUser("John", "johnny");
 

@@ -13,11 +13,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import app.exceptions.InvalidTournamentStateException;
-import app.exceptions.TournamentNotFullException;
-import app.exceptions.TournamentParticipantsSizeException;
-
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
@@ -43,9 +38,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         IllegalArgumentException.class,
         BadRequestException.class,
-        InvalidTournamentStateException.class,
-        TournamentNotFullException.class,
-        TournamentParticipantsSizeException.class
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
         return ResponseEntity

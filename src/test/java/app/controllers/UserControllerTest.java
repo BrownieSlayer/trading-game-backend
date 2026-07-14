@@ -55,10 +55,7 @@ class UserControllerTest {
         UserRequest userRequest = new UserRequest("John", "password123");
         UserDto userResponse = new UserDto(
             "John",
-            SecurityRole.ROLE_USER,
-            "JohnPlayer#EUW",
-            "GOLD",
-            "III"
+            SecurityRole.ROLE_USER
         );
 
         when(userService.create(any(UserRequest.class))).thenReturn(userResponse);
@@ -68,10 +65,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value("John"))
-                .andExpect(jsonPath("$.role").value("ROLE_USER"))
-                .andExpect(jsonPath("$.riotId").value("JohnPlayer#EUW"))
-                .andExpect(jsonPath("$.rankTier").value("GOLD"))
-                .andExpect(jsonPath("$.rankDivision").value("III"));
+                .andExpect(jsonPath("$.role").value("ROLE_USER"));
     }
 
     @Test
@@ -80,18 +74,14 @@ class UserControllerTest {
         long userId = 1L;
         UserDto userResponse = new UserDto(
             "John",
-            SecurityRole.ROLE_USER,
-            "JohnPlayer#EUW",
-            "GOLD",
-            "III"
+            SecurityRole.ROLE_USER
         );
         when(userService.getById(userId)).thenReturn(userResponse);
 
         mockMvc.perform(get("/api/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("John"))
-                .andExpect(jsonPath("$.riotId").value("JohnPlayer#EUW"));
+                .andExpect(jsonPath("$.username").value("John"));
     }
 
     @Test
@@ -110,17 +100,11 @@ class UserControllerTest {
     void testGetAllUsers() throws Exception {
         UserDto firstUserResponse = new UserDto(
             "John",
-            SecurityRole.ROLE_USER,
-            "JohnPlayer#EUW",
-            "GOLD",
-            "III"
+            SecurityRole.ROLE_USER
         );
         UserDto secondUserResponse = new UserDto(
             "Alice",
-            SecurityRole.ROLE_USER,
-            "AlicePlayer#EUW",
-            "PLATINUM",
-            "II"
+            SecurityRole.ROLE_USER
         );
 
         List<UserDto> users = Arrays.asList(firstUserResponse, secondUserResponse);
@@ -130,9 +114,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].username").value("John"))
-                .andExpect(jsonPath("$[0].riotId").value("JohnPlayer#EUW"))
-                .andExpect(jsonPath("$[1].username").value("Alice"))
-                .andExpect(jsonPath("$[1].riotId").value("AlicePlayer#EUW"));
+                .andExpect(jsonPath("$[1].username").value("Alice"));
     }
 
     @Test
