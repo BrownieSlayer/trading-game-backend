@@ -1,5 +1,7 @@
 package app.configuration.game;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,10 +87,64 @@ public final class MinigameConstants {
                 "informatique", new LeveledUpgrade("Informaticien", 150.0, 1.4, 1.3, 15)
         );
 
-        public static final Map<String, EmploiTier> TIERS = Map.of(
-                "nul", new EmploiTier(1.0, 3.0, 100, -2),
-                "median", new EmploiTier(6.0, 15.0, 5, 3),
-                "fou", new EmploiTier(40.0, 120.0, 0, 1)
+        /**
+         * Paliers de salaire, du moins au plus rare. {@code LinkedHashMap} avec
+         * un ordre d'itération garanti (contrairement à {@code Map.of}) — le
+         * tirage pondéré cumule les poids dans cet ordre précis, voir
+         * {@code EmploymentServiceImpl.drawTier}.
+         */
+        public static final Map<String, EmploiTier> TIERS;
+
+        static {
+            Map<String, EmploiTier> tiers = new LinkedHashMap<>();
+            tiers.put("nul", new EmploiTier(1.0, 3.0, 100, -2));
+            tiers.put("median", new EmploiTier(6.0, 15.0, 5, 3));
+            tiers.put("fou", new EmploiTier(40.0, 120.0, 0, 1));
+            TIERS = Collections.unmodifiableMap(tiers);
+        }
+
+        /** 30 métiers par palier, tirés au hasard pour habiller chaque offre générée. */
+        public static final Map<String, List<String>> JOB_TITLES = Map.of(
+                "nul", List.of(
+                        "Distributeur de flyers", "Testeur de matelas", "Compteur de moutons",
+                        "Promeneur de chiens", "Plongeur en restauration", "Caissier de supermarché",
+                        "Livreur de pizzas à vélo", "Étiqueteur de fruits", "Videur de boîtes aux lettres",
+                        "Goûteur de croquettes pour chats", "Testeur de sonneries de téléphone",
+                        "Ramasseur de balles de golf", "Emballeur de cadeaux", "Standardiste débutant",
+                        "Photocopieur professionnel", "Nettoyeur de vitres", "Stagiaire café-photocopies",
+                        "Rembourreur de coussins", "Trieur de déchets recyclables", "Figurant pour publicité",
+                        "Testeur de jeux vidéo mobiles gratuits", "Éplucheur de patates",
+                        "Surveillant de parking", "Homme-sandwich publicitaire", "Manutentionnaire d'entrepôt",
+                        "Aide-déménageur", "Colleur d'affiches", "Guide touristique débutant",
+                        "Vendeur de glaces ambulant", "Testeur de matelas à ressorts"
+                ),
+                "median", List.of(
+                        "Comptable", "Développeur web", "Chef de projet", "Professeur des écoles",
+                        "Infirmier", "Graphiste freelance", "Community manager", "Électricien",
+                        "Plombier", "Architecte d'intérieur", "Consultant RH", "Journaliste",
+                        "Traducteur", "Photographe professionnel", "Ingénieur logiciel",
+                        "Analyste financier", "Data analyst", "Kinésithérapeute", "Avocat junior",
+                        "Chef de rang", "Responsable marketing", "Technicien de maintenance",
+                        "Gestionnaire de patrimoine", "Designer UX/UI", "Rédacteur technique",
+                        "Chargé de communication", "Ingénieur réseau", "Pharmacien",
+                        "Notaire assistant", "Auditeur junior"
+                ),
+                "fou", List.of(
+                        "Trader haute fréquence", "CEO de startup licorne", "Chirurgien esthétique des stars",
+                        "Consultant en fusion-acquisition", "Influenceur crypto",
+                        "Développeur d'IA chez une GAFAM", "Avocat d'affaires international",
+                        "Gérant de hedge fund", "Architecte de gratte-ciel",
+                        "Producteur de cinéma hollywoodien", "Ingénieur aérospatial",
+                        "Négociateur en art contemporain", "Consultant en stratégie",
+                        "Banquier d'affaires à Wall Street", "Champion e-sport sponsorisé",
+                        "Chef étoilé Michelin", "Investisseur en capital-risque",
+                        "Directeur artistique de maison de luxe", "Pilote de ligne long-courrier",
+                        "Neurochirurgien", "Fondateur de licorne tech",
+                        "Agent de joueurs de foot professionnels", "Consultant en intelligence artificielle",
+                        "Diamantaire", "Armateur international", "Trader de matières premières",
+                        "Skipper de yacht de luxe", "Rockstar en tournée mondiale",
+                        "Ambassadeur de marque de luxe", "Magnat de l'immobilier"
+                )
         );
     }
 
