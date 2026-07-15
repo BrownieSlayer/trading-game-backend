@@ -5,3 +5,6 @@ databaseChangeLog:
   - include:
       file: changesets/changeset_002_portfolio.sql
       relativeToChangelogFile: true
+  - include:
+      file: changesets/changeset_003_pari_roue.sql
+      relativeToChangelogFile: true

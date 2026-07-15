@@ -2,7 +2,6 @@ package app.services.impl;
 
 import java.math.BigDecimal;
 import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -16,6 +15,7 @@ import app.models.Portfolio;
 import app.models.User;
 import app.repositories.PortfolioRepository;
 import app.repositories.PortfolioValueSnapshotRepository;
+import app.services.PariService;
 import app.services.PortfolioService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,13 +45,15 @@ class DailyCycleServiceImplTest {
     private PortfolioValueSnapshotRepository portfolioValueSnapshotRepository;
     @Mock
     private PortfolioService portfolioService;
+    @Mock
+    private PariService pariService;
 
     private User user;
     private Portfolio portfolio;
 
     private DailyCycleServiceImpl serviceAt(LocalDate today) {
         Clock clock = Clock.fixed(today.atStartOfDay(ZONE).toInstant(), ZONE);
-        return new DailyCycleServiceImpl(portfolioRepository, portfolioValueSnapshotRepository, portfolioService, clock);
+        return new DailyCycleServiceImpl(portfolioRepository, portfolioValueSnapshotRepository, portfolioService, pariService, clock);
     }
 
     private void givenPortfolio(LocalDate lastSessionDate, int streak) {

@@ -14,6 +14,7 @@ import app.models.User;
 import app.repositories.PortfolioRepository;
 import app.repositories.PortfolioValueSnapshotRepository;
 import app.services.DailyCycleService;
+import app.services.PariService;
 import app.services.PortfolioService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,7 @@ public class DailyCycleServiceImpl implements DailyCycleService {
     private final PortfolioRepository portfolioRepository;
     private final PortfolioValueSnapshotRepository portfolioValueSnapshotRepository;
     private final PortfolioService portfolioService;
+    private final PariService pariService;
     private final Clock clock;
 
     @Override
@@ -43,6 +45,8 @@ public class DailyCycleServiceImpl implements DailyCycleService {
         portfolio.setStreak(nextStreak(portfolio.getLastSessionDate(), portfolio.getStreak(), today));
         portfolio.setLastSessionDate(today);
         portfolioRepository.save(portfolio);
+
+        pariService.resolveActiveBet(portfolio, today);
 
         recordValueSnapshot(portfolio, today);
     }
